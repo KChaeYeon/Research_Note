@@ -332,8 +332,8 @@ function renderModalNote(note) {{
     `<div class="insight-item">💡 ${{escHtml(ins)}}</div>`).join('');
 
   document.getElementById('modal-content').innerHTML = `
-    <div class="note-title">${{note.date}} 연구노트</div>
-    <div class="note-meta">${{note.start_time}} ~ ${{note.end_time}}</div>
+    <div class="note-title">${{escHtml(note.date)}} 연구노트</div>
+    <div class="note-meta">${{escHtml(note.start_time)}} ~ ${{escHtml(note.end_time)}}</div>
     <div style="margin-bottom:12px">${{topics}}</div>
     <div class="section-title">오늘의 요약</div>
     <div class="summary-text">${{escHtml(note.summary||'')}}</div>
@@ -366,6 +366,8 @@ document.getElementById('next-month').onclick = () => {{
   renderCalendar();
 }};
 
+document.addEventListener('keydown', e => {{ if (e.key === 'Escape') closeModalDirect(); }});
+
 init();
 </script>
 </body>
@@ -387,6 +389,10 @@ def rebuild_index_html(output_dir: Path) -> None:
             notes_meta[p.stem] = note.get('topics', [])
         except (json.JSONDecodeError, OSError):
             notes_meta[p.stem] = []
-    notes_meta_json = json.dumps(notes_meta, ensure_ascii=False)
+    notes_meta_json = (
+        json.dumps(notes_meta, ensure_ascii=False)
+        .replace('</', '<\\/')
+        .replace('<!--', '<\\!--')
+    )
     html = HTML_TEMPLATE.format(notes_meta_json=notes_meta_json)
     (output_dir / "index.html").write_text(html, encoding='utf-8')

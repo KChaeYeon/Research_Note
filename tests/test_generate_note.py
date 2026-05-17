@@ -1,11 +1,20 @@
 import json
 import os
 import sys
+import tempfile
 from datetime import datetime, timezone
+from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from generate_note import parse_session_messages, build_conversation_text, generate_note_data, SUMMARY_SYSTEM
+from generate_note import (
+    parse_session_messages,
+    build_conversation_text,
+    generate_note_data,
+    write_note_json,
+    rebuild_index_html,
+    SUMMARY_SYSTEM,
+)
 
 
 def test_parse_user_message_in_range(tmp_path):
@@ -124,11 +133,6 @@ def test_generate_note_data_json_fallback():
     assert result['insights'] == []
     assert result['date'] == '2026-05-17'
     assert 'summary' in result
-
-
-import tempfile
-from pathlib import Path
-from generate_note import write_note_json, rebuild_index_html
 
 
 def test_write_note_json_creates_file():
