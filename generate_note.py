@@ -396,3 +396,42 @@ def rebuild_index_html(output_dir: Path) -> None:
     )
     html = HTML_TEMPLATE.format(notes_meta_json=notes_meta_json)
     (output_dir / "index.html").write_text(html, encoding='utf-8')
+
+
+def main() -> None:
+    """퇴근 시 호출되는 진입점. state file을 읽어 전체 파이프라인 실행."""
+    if not STATE_FILE.exists():
+        print("[research_note] state file not found. Did you send '출근'?", file=sys.stderr)
+        sys.exit(1)
+
+    state = json.loads(STATE_FILE.read_text(encoding='utf-8'))
+    start_time = datetime.fromisoformat(state['start_time'].replace('Z', '+00:00'))
+    end_time = datetime.now(tz=timezone.utc)
+    date_str = state['date']
+    start_str = start_time.astimezone().strftime('%H:%M')
+    end_str = end_time.astimezone().strftime('%H:%M')
+
+    jsonl_paths = list(str(p) for p in PROJECT_DIR.glob("*.jsonl"))
+    if not jsonl_paths:
+        print("[research_note] no session files found.", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"[research_note] Parsing {len(jsonl_paths)} session files...")
+    messages = parse_session_messages(jsonl_paths, start_time, end_time)
+    if not messages:
+        print("[research_note] No messages found in range.", file=sys.stderr)
+        sys.exit(0)
+
+    print(f"[research_note] {len(messages)} messages found. Calling Claude API...")
+    conversation = build_conversation_text(messages)
+    note_data = generate_note_data(conversation, date_str, start_str, end_str)
+
+    NOTES_DIR.mkdir(parents=True, exist_ok=True)
+    write_note_json(note_data, NOTES_DIR)
+    rebuild_index_html(NOTES_DIR)
+
+    print(f"[research_note] Done! {NOTES_DIR}/index.html updated.")
+
+
+if __name__ == '__main__':
+    main()
