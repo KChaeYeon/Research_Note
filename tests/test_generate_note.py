@@ -2,9 +2,10 @@ import json
 import os
 import sys
 from datetime import datetime, timezone
+from unittest.mock import patch, MagicMock
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from generate_note import parse_session_messages
+from generate_note import parse_session_messages, build_conversation_text, generate_note_data
 
 
 def test_parse_user_message_in_range(tmp_path):
@@ -51,3 +52,46 @@ def test_parse_assistant_message(tmp_path):
     assert len(results) == 1
     assert results[0]['role'] == 'assistant'
     assert 'Butterworth' in results[0]['content']
+
+
+def test_build_conversation_text():
+    messages = [
+        {'role': 'user', 'content': 'EEG 필터링 어떻게 해?', 'timestamp': None},
+        {'role': 'assistant', 'content': 'Butterworth 필터를 쓰세요.', 'timestamp': None},
+    ]
+    text = build_conversation_text(messages)
+    assert '[사용자]' in text
+    assert 'EEG 필터링' in text
+    assert '[어시스턴트]' in text
+    assert 'Butterworth' in text
+
+
+def test_generate_note_data_returns_required_keys():
+    mock_response = MagicMock()
+    mock_response.content = [MagicMock(
+        text=json.dumps({
+            "topics": ["EEG"],
+            "summary": "오늘 EEG 필터링을 공부했다.",
+            "qa_highlights": [],
+            "code_highlights": [],
+            "insights": []
+        })
+    )]
+
+    with patch('generate_note.anthropic.Anthropic') as MockClient:
+        instance = MockClient.return_value
+        instance.messages.create.return_value = mock_response
+
+        result = generate_note_data(
+            conversation_text="[사용자] EEG?\n[어시스턴트] Butterworth.",
+            date="2026-05-17",
+            start_str="09:00",
+            end_str="18:00",
+        )
+
+    assert 'topics' in result
+    assert 'summary' in result
+    assert 'qa_highlights' in result
+    assert result['date'] == '2026-05-17'
+    assert result['start_time'] == '09:00'
+    assert result['end_time'] == '18:00'
