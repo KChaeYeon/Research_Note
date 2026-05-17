@@ -124,3 +124,52 @@ def test_generate_note_data_json_fallback():
     assert result['insights'] == []
     assert result['date'] == '2026-05-17'
     assert 'summary' in result
+
+
+import tempfile
+from pathlib import Path
+from generate_note import write_note_json, rebuild_index_html
+
+
+def test_write_note_json_creates_file():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        data_dir = Path(tmpdir) / "data"
+        data_dir.mkdir()
+        note = {
+            "date": "2026-05-17",
+            "start_time": "09:00",
+            "end_time": "18:00",
+            "topics": ["EEG"],
+            "summary": "테스트 요약",
+            "qa_highlights": [],
+            "code_highlights": [],
+            "insights": [],
+        }
+        write_note_json(note, Path(tmpdir))
+        out = data_dir / "2026-05-17.json"
+        assert out.exists()
+        loaded = json.loads(out.read_text(encoding='utf-8'))
+        assert loaded['date'] == '2026-05-17'
+
+
+def test_rebuild_index_html_creates_file():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmppath = Path(tmpdir)
+        data_dir = tmppath / "data"
+        data_dir.mkdir()
+        notes = {
+            "2026-05-16": ["EEG", "필터링"],
+            "2026-05-17": ["CNN", "MRI 분류"],
+        }
+        for d, topics in notes.items():
+            (data_dir / f"{d}.json").write_text(
+                json.dumps({"date": d, "topics": topics, "summary": ""}),
+                encoding='utf-8'
+            )
+        rebuild_index_html(tmppath)
+        assert (tmppath / "index.html").exists()
+        html = (tmppath / "index.html").read_text(encoding='utf-8')
+        assert "2026-05-17" in html
+        assert "2026-05-16" in html
+        assert "CNN" in html
+        assert "EEG" in html
