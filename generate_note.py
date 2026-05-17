@@ -1,6 +1,4 @@
 import json
-import os
-import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -11,7 +9,7 @@ STATE_FILE = Path.home() / ".claude" / "research_note_state.json"
 
 
 def parse_session_messages(
-    jsonl_paths: list[str],
+    jsonl_paths: list[str | Path],
     start_time: datetime,
     end_time: datetime
 ) -> list[dict]:
@@ -19,6 +17,11 @@ def parse_session_messages(
 
     Returns list of {"role": str, "content": str, "timestamp": datetime}
     """
+    if start_time.tzinfo is None:
+        start_time = start_time.replace(tzinfo=timezone.utc)
+    if end_time.tzinfo is None:
+        end_time = end_time.replace(tzinfo=timezone.utc)
+
     messages = []
     for path in jsonl_paths:
         with open(path, encoding='utf-8') as f:
