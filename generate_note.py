@@ -1,4 +1,5 @@
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -8,6 +9,9 @@ import anthropic
 PROJECT_DIR = Path.home() / ".claude" / "projects" / "-mnt-d-00-Project"
 NOTES_DIR = Path("/mnt/d/00_Project/research_notes")
 STATE_FILE = Path.home() / ".claude" / "research_note_state.json"
+
+MAX_MSG_CHARS = 2000
+MODEL = "claude-haiku-4-5-20251001"
 
 
 def parse_session_messages(
@@ -98,7 +102,9 @@ def build_conversation_text(messages: list[dict]) -> str:
     lines = []
     for msg in messages:
         role_label = '[사용자]' if msg['role'] == 'user' else '[어시스턴트]'
-        content = msg['content'][:2000]
+        content = msg['content']
+        if len(content) > MAX_MSG_CHARS:
+            content = content[:MAX_MSG_CHARS] + '... [truncated]'
         lines.append(f"{role_label}\n{content}")
     return '\n\n'.join(lines)
 
@@ -116,7 +122,7 @@ def generate_note_data(
         conversation=conversation_text,
     )
     response = client.messages.create(
-        model="claude-haiku-4-5-20251001",
+        model=MODEL,
         max_tokens=4096,
         system=SUMMARY_SYSTEM,
         messages=[{"role": "user", "content": prompt}],
@@ -125,13 +131,24 @@ def generate_note_data(
     try:
         data = json.loads(raw)
     except json.JSONDecodeError:
-        data = {
-            "topics": [],
-            "summary": raw[:500],
-            "qa_highlights": [],
-            "code_highlights": [],
-            "insights": [],
-        }
+        # Strip markdown code fences that Claude sometimes adds despite instructions
+        stripped = raw
+        if stripped.startswith('```'):
+            stripped = '\n'.join(stripped.split('\n')[1:])
+        if stripped.endswith('```'):
+            stripped = '\n'.join(stripped.split('\n')[:-1])
+        stripped = stripped.strip()
+        try:
+            data = json.loads(stripped)
+        except json.JSONDecodeError:
+            print(f"[research_note][warn] JSON parse failed. raw={raw[:200]}", file=sys.stderr)
+            data = {
+                "topics": [],
+                "summary": raw[:500],
+                "qa_highlights": [],
+                "code_highlights": [],
+                "insights": [],
+            }
     data['date'] = date
     data['start_time'] = start_str
     data['end_time'] = end_str

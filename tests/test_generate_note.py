@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from unittest.mock import patch, MagicMock
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from generate_note import parse_session_messages, build_conversation_text, generate_note_data
+from generate_note import parse_session_messages, build_conversation_text, generate_note_data, SUMMARY_SYSTEM
 
 
 def test_parse_user_message_in_range(tmp_path):
@@ -95,3 +95,32 @@ def test_generate_note_data_returns_required_keys():
     assert result['date'] == '2026-05-17'
     assert result['start_time'] == '09:00'
     assert result['end_time'] == '18:00'
+
+    instance.messages.create.assert_called_once()
+    call_kwargs = instance.messages.create.call_args.kwargs
+    assert call_kwargs['model'] == 'claude-haiku-4-5-20251001'
+    assert call_kwargs['system'] == SUMMARY_SYSTEM
+    assert call_kwargs['max_tokens'] == 4096
+
+
+def test_generate_note_data_json_fallback():
+    mock_response = MagicMock()
+    mock_response.content = [MagicMock(text="this is not json at all")]
+
+    with patch('generate_note.anthropic.Anthropic') as MockClient:
+        instance = MockClient.return_value
+        instance.messages.create.return_value = mock_response
+
+        result = generate_note_data(
+            conversation_text="some conversation",
+            date="2026-05-17",
+            start_str="09:00",
+            end_str="18:00",
+        )
+
+    assert result['topics'] == []
+    assert result['qa_highlights'] == []
+    assert result['code_highlights'] == []
+    assert result['insights'] == []
+    assert result['date'] == '2026-05-17'
+    assert 'summary' in result
