@@ -404,10 +404,14 @@ def main() -> None:
         print("[research_note] state file not found. Did you send '출근'?", file=sys.stderr)
         sys.exit(1)
 
-    state = json.loads(STATE_FILE.read_text(encoding='utf-8'))
-    start_time = datetime.fromisoformat(state['start_time'].replace('Z', '+00:00'))
+    try:
+        state = json.loads(STATE_FILE.read_text(encoding='utf-8'))
+        start_time = datetime.fromisoformat(state['start_time'].replace('Z', '+00:00'))
+        date_str = state['date']
+    except (json.JSONDecodeError, KeyError, ValueError) as e:
+        print(f"[research_note] state file invalid: {e}", file=sys.stderr)
+        sys.exit(1)
     end_time = datetime.now(tz=timezone.utc)
-    date_str = state['date']
     start_str = start_time.astimezone().strftime('%H:%M')
     end_str = end_time.astimezone().strftime('%H:%M')
 
@@ -424,7 +428,11 @@ def main() -> None:
 
     print(f"[research_note] {len(messages)} messages found. Calling Claude API...")
     conversation = build_conversation_text(messages)
-    note_data = generate_note_data(conversation, date_str, start_str, end_str)
+    try:
+        note_data = generate_note_data(conversation, date_str, start_str, end_str)
+    except Exception as e:
+        print(f"[research_note] API call failed: {e}", file=sys.stderr)
+        sys.exit(1)
 
     NOTES_DIR.mkdir(parents=True, exist_ok=True)
     write_note_json(note_data, NOTES_DIR)
