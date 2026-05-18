@@ -226,10 +226,10 @@ body { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; background
   .kw-tag { font-size: 0.68rem; padding: 2px 5px; }
   .theme-legend { gap: 10px; }
   .legend-item { font-size: 0.78rem; }
-  .modal-backdrop { padding: 0; align-items: flex-end; }
-  .modal { border-radius: 18px 18px 0 0; max-height: 92vh; overflow-y: auto; }
+  .modal-backdrop { padding: 0; align-items: flex-end; overflow: hidden; }
+  .modal { border-radius: 18px 18px 0 0; max-height: 90vh; overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .modal-header { padding: 20px 16px 14px; }
-  .modal-body { padding: 14px 16px 24px; }
+  .modal-body { padding: 14px 16px 28px; }
   .modal-date { font-size: 1.3rem; }
 }
 .cal-cell.has-note.theme-rsp        { border-color: #f48fb1; }
@@ -248,7 +248,7 @@ body { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; background
 .kw-tag { font-size: 0.78rem; border-radius: 8px; padding: 3px 7px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-start; justify-content: center; padding: 48px 16px 48px; overflow-y: auto; }
 .modal-backdrop.open { display: flex; }
-.modal { background: #fff; border-radius: 18px; width: 100%; max-width: 740px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.22); position: relative; }
+.modal { background: #fff; border-radius: 18px; width: 100%; max-width: 740px; overflow-x: hidden; overflow-y: auto; box-shadow: 0 24px 64px rgba(0,0,0,0.22); position: relative; }
 .modal-close { position: absolute; top: 14px; right: 16px; background: rgba(0,0,0,0.08); border: none; font-size: 1.1rem; cursor: pointer; color: #555; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; transition: background 0.15s; z-index: 1; }
 .modal-close:hover { background: rgba(0,0,0,0.15); color: #111; }
 .modal-header { padding: 26px 28px 20px; }
