@@ -1,52 +1,53 @@
 {
   "theme": "misc",
   "topics": [
+    "연구노트 시스템 개발",
     "GitHub Pages 배포",
     "PWA 모바일 앱화",
-    "연구노트 시스템 UI 개선"
+    "UI/UX 개선"
   ],
   "summary_3lines": [
-    "GitHub Pages에 Research_Note 저장소 생성 및 PWA 설정으로 모바일 앱화 완료",
-    "모달 스크롤 문제 해결, 테마별 탭 구조 도입, 캘린더 레이아웃 최적화",
-    "자동 캐시 업데이트 메커니즘으로 퇴근 후 앱/웹 즉시 동기화 구현"
+    "GitHub Pages와 PWA를 통해 웹/모바일에서 접근 가능한 연구노트 시스템 완성 배포",
+    "모달 내 테마별 탭 구분, 캘린더 너비 동일화, 주간목표 열 확장으로 가시성 향상",
+    "퇴종 자동화 설정 및 Service Worker 기반 Network-first 캐싱으로 실시간 동기화 완료"
   ],
   "qa_highlights": [
     {
-      "q_original": "이 HTML 파일을 내가 언제 어디에서든지 웹과 핸드폰에서 확인할 수 있도록 하려면 어떻게 해야해? 구체적인 방법으로 알려줘.",
-      "a_summary": "GitHub Pages, Netlify, Cloudflare Pages 3가지 방법 제시. GitHub Pages 추천하며 설정 절차 상세 설명. 퇴근 hook에 git push 추가로 완전 자동화 가능.",
-      "a_original": "크게 세 가지 방법이 있고, 상황에 맞게 하나를 선택하면 됩니다.\n\n## 방법 1: GitHub Pages (추천, 무료)\n\n**조건**: GitHub 계정 필요, public repo (또는 GitHub Pro)\n\n**설정:**\n```bash\n# 1. research_notes 폴더를 GitHub repo로 push\ncd /mnt/d/00_Project/research_notes\ngit remote add origin https://github.com/[아이디]/research-notes.git\ngit push -u origin master\n\n# 2. GitHub → repo Settings → Pages → Source: master branch → Save\n```"
+      "q_original": "이 HTML 파일을 어디서나 웹과 핸드폰에서 확인할 수 있도록 하려면 어떻게 해야해?",
+      "a_summary": "GitHub Pages(추천), Netlify, Cloudflare Pages 세 가지 방안 제시. GitHub Pages 선택 후 `KChaeYeon/Research_Note` repo 생성 → gh CLI 인증 → 자동 배포 완료. URL: https://kchaeyeon.github.io/Research_Note/",
+      "a_original": "크게 세 가지 방법이 있고, 상황에 맞게 하나를 선택하면 됩니다. ---## 방법 1: GitHub Pages (추천, 무료) **조건**: GitHub 계정 필요, public repo (또는 GitHub Pro) **설정:** ```bash # 1. research_notes 폴더를 GitHub repo로 push cd /mnt/d/00_Project/research_notes git remote add origin https://github.com/[아이디]/research-notes.git git push -u origin master # 2. GitHub → repo Settings → Pages → Source: master branch → Save ``` **결과 URL**: `https://[아이디].github.io/research-notes/Chaeyeon%27s_Research_Note.html`"
     },
     {
-      "q_original": "html 코드와 data는 깃허브에 항상 지속적으로 업데이트해주고, html 형식도 사이트 혹은 앱 형식으로 볼 수 있도록 수정해줘. 지금까지 만든 html 및 데이터 형식을 apk 파일의 앱으로 만들어서 핸드폰으로 볼 수 있어?",
-      "a_summary": "APK 기술적으로 가능하나 매번 업데이트 필요 문제. PWA 추천 (manifest.json, Service Worker 추가). Android Chrome에서 '홈 화면에 추가'로 앱 아이콘 생성, 자동 업데이트 지원.",
-      "a_original": "세 가지 옵션을 비교해 설명할게.\n\n---\n\n**옵션 비교**\n\n| 방식 | 난이도 | 결과 | 추천도 |\n|------|--------|------|--------|\n| **GitHub Pages 모바일 브라우저** | 이미 완료 | URL 접속, 북마크 | ★★★ |\n| **PWA (Progressive Web App)** | 쉬움 | 홈 화면에 앱 아이콘, 오프라인 가능 | ★★★★★ |\n| **APK (TWA/WebView 앱)** | 복잡 | 진짜 .apk 파일 | ★★ |"
+      "q_original": "핸드폰으로 앱 형식으로 볼 수 있게 APK 파일로 만들 수 있어?",
+      "a_summary": "APK는 가능하지만 매번 수동 업데이트 필요. PWA(Progressive Web App) 추천 - manifest.json + Service Worker 추가로 홈화면 아이콘 설치 후 앱처럼 실행. GitHub 업데이트 자동 반영, 오프라인 캐시 지원.",
+      "a_original": "세 가지 옵션을 비교해 설명할게. --- **옵션 비교** | 방식 | 난이도 | 결과 | 추천도 | |------|--------|------|--------| | **GitHub Pages 모바일 브라우저** | 이미 완료 | URL 접속, 북마크 | ★★★ | | **PWA (Progressive Web App)** | 쉬움 | 홈 화면에 앱 아이콘, 오프라인 가능 | ★★★★★ | | **APK (TWA/WebView 앱)** | 복잡 | 진짜 .apk 파일 | ★★ |"
     },
     {
-      "q_original": "핸드폰 앱에서는 노트가 스크롤이 안돼. 다시 확인해서 수정해줘",
-      "a_summary": "모달 CSS에서 desktop의 overflow: hidden이 mobile overflow-y: auto 설정을 오버라이드. border-radius clipping용 hidden 제거, iOS용 -webkit-overflow-scrolling 추가로 해결.",
-      "a_original": "문제 파악했어. 모바일 CSS에서 `.modal`에 `overflow: hidden`(데스크톱)이 남아있어서 `overflow-y: auto`가 제대로 안 먹히고, iOS용 `-webkit-overflow-scrolling` 도 없어."
+      "q_original": "퇴근 후 자동으로 모바일 앱이나 웹에서도 업데이트가 자동으로 되는거야? 캐시 삭제 같은 거 안 해도?",
+      "a_summary": "자동 업데이트 됨. Service Worker를 Network-first 전략으로 설정해 앱 열 때마다 서버에서 최신 파일 먼저 가져옴. GitHub CDN 캐시 5~10분 예외 있음.",
+      "a_original": "**결론: 자동으로 돼. 캐시 삭제 불필요.** --- 흐름을 설명하면: ``` 퇴근 입력   → generate_note.py 실행 (노트 생성 + index.html 재생성)   → git push → GitHub Pages 업데이트   → 앱/브라우저에서 열 때 자동으로 최신 index.html 가져옴 ``` Service Worker를 **Network-first** 전략으로 설정했기 때문에, 앱을 열 때마다 인터넷이 있으면 항상 서버에서 최신 파일을 먼저 받아와."
     },
     {
-      "q_original": "그럼 퇴근이라고 업데이트를 하게 된다면 자동으로 모바일 앱이나 웹에서도 업데이트가 자동으로 되는거야? 캐시 삭제나 이런거 안해도?",
-      "a_summary": "Service Worker의 cache-first 전략으로 최신 버전을 주기적으로 확인. 퇴근 후 GitHub 푸시 → 앱 재시작 시 자동 감지 및 업데이트. 대부분 자동이나 초기 설치 후 첫 업데이트는 명시적 캐시 갱신 권장.",
-      "a_original": "응, 자동으로 업데이트돼. Service Worker가 앱 실행 시 GitHub의 최신 파일 확인해서 변경 감지하면 백그라운드에서 새 버전 다운로드하고, 다음 재시작 때 적용해. 처음 PWA 설치 후 첫 업데이트는 명시적 새로고침 필요할 수 있지만, 그 이후는 자동."
+      "q_original": "여기서 이야기해도 daily 연구노트에 자동으로 업데이트 되도록 인식되는거지?",
+      "a_summary": "현재는 '출근'/'퇴근' 키워드 트리거 방식. 일반 대화는 노트에 반영 안 됨. 단, generate_note.py가 세션 JSONL 로그 전체를 읽으면 퇴근 시 오늘 전체 대화 자동 반영됨. 검증 필요.",
+      "a_original": "확인해보니, **자동 업데이트는 '출근' / '퇴근' 키워드 트리거 방식**입니다. 평소 대화 내용이 실시간으로 노트에 쌓이는 구조는 **아닙니다**. ## 🔍 현재 동작 방식 `~/.claude/hooks/research_note_hook.sh` 가 `UserPromptSubmit` 이벤트에 걸려있고, 프롬프트에 특정 키워드가 있을 때만 작동합니다."
     }
   ],
   "code_highlights": [
-    "Service Worker 구현: cache-first 전략으로 PWA 오프라인 지원 및 자동 업데이트",
-    "manifest.json 설정: 앱 메타데이터, 홈 화면 아이콘 정의, display: standalone",
-    "테마 탭 UI: renderModalNote 함수 재작성으로 rsp/ultrasound/sleep/misc 동적 탭 생성",
-    "CSS Grid 최적화: 캘린더 날짜 열 minmax(0, 1fr) 고정 너비, 주간목표 열 160px 확장",
-    "모바일 CSS: -webkit-overflow-scrolling: touch로 iOS 스크롤 성능 최적화"
+    "PWA 설정: manifest.json(앱 메타데이터), sw.js(Service Worker Network-first 캐싱 전략)",
+    "HTML 템플릿: 테마별 탭 구조 추가 (renderModalNote 함수 재작성, 4개 탭 자동 생성)",
+    "CSS 그리드: 캘린더 날짜 열 minmax(0, 1fr)로 동일 너비 유지, 주간목표 열 160px 확장",
+    "모바일 CSS: overflow-y: auto + -webkit-overflow-scrolling: touch로 스크롤 최적화",
+    "자동 배포: git push hook + GitHub Pages CDN (5~10분 지연)"
   ],
   "insights": [
-    "PWA는 APK보다 자동 업데이트 측면에서 우월 - 배포 자동화와 사용자 경험 동시 해결",
-    "Service Worker cache 전략이 오프라인 가용성과 지속적 배포의 핵심 기술",
-    "모바일 first 설계에서 데스크톱 CSS 오버라이드 문제는 명시적 mobile media query로 해결 필수",
-    "GitHub Pages + nohup bash 조합으로 완전 자동화된 연구노트 배포 파이프라인 구축 완료"
+    "PWA는 APK보다 배포·유지보수 효율 우수. 웹 업데이트 자동 반영, 오프라인 지원, 설치 간편",
+    "Network-first 전략은 온라인 우선 최신화, 오프라인 폴백으로 사용자 경험 최적화",
+    "Service Worker 캐싱으로 GitHub CDN 지연 예외처리 필요(실사용 시 5~10분 후 반영)",
+    "현재 generate_note.py가 JSONL 세션 로그 기반인지 상태파일 기반인지 재검증 필요 - 실시간 누적 기능 구현 여부 결정"
   ],
   "date": "2026-05-18",
   "start_time": "20260518 09:25",
-  "end_time": "20260518 10:02",
+  "end_time": "20260518 10:08",
   "daily_goal": "1. 발표 자료 및 발표 스크립트 작성\\n2. 예상 질문 및 답안 준비"
 }
