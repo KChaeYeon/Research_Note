@@ -180,6 +180,12 @@ HTML_TEMPLATE = '''<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chaeyeon\'s Research Note</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="연구노트">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; background: #f0f4f8; color: #333; min-height: 100vh; }
@@ -208,6 +214,24 @@ body { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; background
 .cal-cell.today .day-num { color: #1565c0; font-weight: 800; }
 .cal-cell.has-note { cursor: pointer; }
 .cal-cell.has-note:hover { transform: translateY(-1px); }
+@media (max-width: 700px) {
+  .page { padding: 16px 10px; }
+  .page-title { font-size: 1.2rem; }
+  .page-subtitle { font-size: 0.82rem; }
+  .cal-grid { grid-template-columns: 70px repeat(7, 1fr); gap: 3px; }
+  .cal-week-goal { min-height: 64px; padding: 5px 4px; }
+  .week-goal-text { font-size: 0.72rem; }
+  .cal-cell { min-height: 64px; padding: 5px 4px; }
+  .day-num { font-size: 0.85rem; }
+  .kw-tag { font-size: 0.68rem; padding: 2px 5px; }
+  .theme-legend { gap: 10px; }
+  .legend-item { font-size: 0.78rem; }
+  .modal-backdrop { padding: 0; align-items: flex-end; }
+  .modal { border-radius: 18px 18px 0 0; max-height: 92vh; overflow-y: auto; }
+  .modal-header { padding: 20px 16px 14px; }
+  .modal-body { padding: 14px 16px 24px; }
+  .modal-date { font-size: 1.3rem; }
+}
 .cal-cell.has-note.theme-rsp        { border-color: #f48fb1; }
 .cal-cell.has-note.theme-rsp:hover  { box-shadow: 0 4px 16px rgba(233,30,99,0.18); }
 .cal-cell.has-note.theme-rsp .kw-tag { background: #fce4ec; color: #c2185b; }
@@ -471,6 +495,10 @@ document.getElementById('next-month').onclick = () => {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalDirect(); });
 
 init();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+}
 </script>
 </body>
 </html>'''
