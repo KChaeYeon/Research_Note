@@ -1,45 +1,71 @@
 {
   "theme": "misc",
   "topics": [
-    "공개발표회 준비",
-    "발표 스크립트 수정",
-    "논문 방향 재검토"
+    "발표 준비",
+    "연구 방향 재설계",
+    "HTML 도비일지 리디자인"
   ],
   "summary_3lines": [
-    "내일 공개발표회 발표자료와 스크립트 검토 및 수정 완료",
-    "호흡→CSF 메커니즘에서 심혈관계 지표 측정으로의 전환 논리 보강",
-    "슬라이드 10, 15번 스크립트 수정으로 논리적 비약 해소"
+    "내일 공개발표회를 위해 발표자료(슬라이드 9-15번) 검토 및 스크립트 수정.",
+    "호흡 조절 연구의 novelty 부족 문제 진단 후 PET + 장기훈련 도구 방향 제시.",
+    "research_notes 시스템 리디자인 및 슬라이드 10, 15번 스크립트 수정 완료."
   ],
   "qa_highlights": [
     {
-      "q_original": "슬라이드 10에서 호흡 메커니즘을 다시 언급하면서 심혈관계 지표를 본다고 간단하게 언급하고 진행하고 싶은데 스크립트를 수정해줘",
-      "a_summary": "cardiac output은 호흡→CSF 경로의 중간 단계이며, 실시간 비침습적 측정 가능한 대리 지표임을 명시. 메커니즘 재언급 후 심혈관계 지표 사용 이유를 한 문장으로 설명하는 방식으로 수정.",
-      "a_original": "파일을 먼저 읽어보겠습니다... 슬라이드 3에서 respiration → venous return → cardiac output → CSF 경로를 설명하고, 슬라이드 8에서 호흡이 CSF driving force라고 결론냈는데, 갑자기 슬라이드 10 이후 연구에서 CSF가 아닌 심혈관계 지표(cardiac output, stroke volume)를 측정하고 있어서 청중 입장에서는 '왜 갑자기 심혈관계?'라는 의문이 생기는 상황입니다."
+      "q_original": "호흡 조절에 따른 심혈관계 지표 변화 연구가 정말 필요한가? 교수님이 왜 해야 하는지 모르겠다고 하셨어.",
+      "a_summary": "현재 연구는 proxy의 proxy 구조로 임팩트가 약함. CSF 직접 측정 어려움(MRI 품질 이슈) → cardiac output이 respiration-CSF 경로의 중간 단계로 실용적 대리 지표. 최종적으로는 MRI로 CSF dynamics 직접 검증하는 단계적 설계 필요.",
+      "a_original": "교수님의 피드백은 연구의 proxy 문제를 정확히 짚은 것입니다. 호흡 → 심혈관 변화는 glymphatic system에 대한 간접 지표일 뿐이고, 기존 문헌에도 이미 많이 보고된 내용입니다. 진짜 질문은 \"호흡이 뇌 청소를 어떻게 바꾸는가\"인데 측정하는 것은 \"호흡이 심박수를 어떻게 바꾸는가\"입니다."
     },
     {
-      "q_original": "마지막 15번 슬라이드인 future work 슬라이드에 대해서도 스크립트를 검토해줘",
-      "a_summary": "심혈관계 연구의 결과가 곧 CSF 촉진 근거는 아니라는 논리적 비약 문제 발견. 심혈관계 연구 → MRI로 CSF 직접 검증 → 비침습적 전략 근거 제시의 단계적 논리로 수정.",
-      "a_original": "슬라이드 15 스크립트를 검토한 결과, 두 가지 문제점이 있습니다... cardiac output 측정이 곧 CSF 촉진의 직접 근거는 아닙니다. 교수님들께서 '심혈관계 지표를 봤는데 어떻게 CSF 효과를 주장하나요?'라는 질문이 나올 수 있습니다."
+      "q_original": "그럼 지금 상태에서, 뇌 청소 시스템 촉진을 위한 호흡 조절이라는 큰 틀에서 어떻게 연구 방향을 수정할 수 있을까?",
+      "a_summary": "5가지 방향 검토 결과 추천: ① PET study 중심축 (협업연구실) ② 장기 호흡 훈련 도구 개발 (HRV 기반 적응형) ③ 혈중 plasma Aβ 측정 ④ 초음파 TCD pulsatility. 측정 자원의 제약을 고려하면 호흡 훈련 도구 + 혈중 Aβ 조합이 현실적.",
+      "a_original": "기존 호흡 앱(Calm, Breathe+)과의 차별화: ① 실제 호흡 파형 측정·피드백 ② HRV 기반 개인화 적응 ③ 뇌 청소 촉진 목적 ④ 혈중 Aβ로 생물학적 검증. 이 네 가지가 논문에서 novelty 주장의 근거가 됩니다."
     },
     {
-      "q_original": "호흡 조절에 따른 뇌 청소 시스템 촉진 연구의 현재 임팩트가 부족하다는 교수님 피드백 이후, 어떤 방향으로 연구를 재설계해야 할까?",
-      "a_summary": "MRI/PET/외부협력 없이 연구실 자원만으로 실행 가능한 방향: ① Sleep_InfraSlow_RSP 논문의 호흡-CSF PAC 바이오마커를 기반으로, ② 각성 상태 호흡 훈련이 수면 중 호흡-CSF 커플링을 강화하는지 검증 (EEG 장비만 필요). ③ 도구 개발(장기 훈련용 시스템) 방향도 viable하나 최종 outcome 측정 문제 여전히 존재.",
-      "a_original": "[어시스턴트] 알겠습니다. 그러면 근본적으로 다시 생각해야 합니다... `Sleep_InfraSlow_RSP` 폴더에 논문 원고가 있습니다. 바로 읽겠습니다."
+      "q_original": "슬라이드 10번에서 심혈관계 지표를 보는 이유를 스크립트에 자연스럽게 포함시키려면?",
+      "a_summary": "메커니즘 재설명 → cardiac output이 respiration-CSF 경로의 핵심 중간 단계임을 명시 → 심혈관계 지표를 비침습적·실시간 측정 가능한 대리 지표로 사용한다고 설명. 이렇게 하면 CSF 언급과의 논리적 단절 해결.",
+      "a_original": "cardiac output은 respiration → CSF 경로의 중간 단계입니다. 즉, cardiac output을 측정하는 것은 이 경로를 비침습적으로 실시간 검증할 수 있는 실용적 대리 지표입니다(CSF 측정은 MRI 필요)."
     }
   ],
   "code_highlights": [
-    "generate_note.py에 advisor_session JSON 필드 추가하여 지도교수 상담 기록 저장",
-    "index.html 템플릿에 toggleOrig 함수 확장으로 '기타' 탭에 아코디언 식 상담 기록 표시 기능 구현",
-    "CSS 수정으로 모바일/앱 캘린더 가독성 개선: 주간목표 열 65px, 날짜 셀 너비 자동 조정, 좀비 이모티콘 별도 줄 표시"
+    "research_notes HTML: 제목 섹션 다크 테마(네이비 그라데이션) + 생존일 카운터(2022.03.02~현재)",
+    "모바일 앱 캘린더: 주간목표 65px, 요일 열 자동 축소, 오늘 날짜 아래 🧟 이모티콘 별도 줄",
+    "generate_note.py: advisor_session 토글 추가 (기존 기타 탭에 5개 아코디언 통합)"
   ],
   "insights": [
-    "심혈관계 지표는 호흡→CSF 경로의 중간 검증 단계로 포지셔닝해야 최종 CSF 효과 주장이 논리적으로 타당함",
-    "기존 Sleep_InfraSlow_RSP 논문의 gap ('실시간 글림프 측정 방법 부재')이 당신 졸업 연구의 명확한 rationale이 될 수 있음",
-    "MRI/PET 없이 EEG만으로도 호흡 훈련의 수면 중 효과를 검증 가능 (호흡-CSF PAC 강화도, 인프라슬로우 amplitude 등)",
-    "내일 발표에서는 현재 슬라이드 10~15의 단계적 논리 강조가 '왜 심혈관 지표인가' 질문을 사전에 차단할 수 있음"
+    "proxy 연구의 임팩트는 최종 outcome의 직접성에 따라 결정됨. 심혈관 지표 자체는 약하지만, 단계적으로 MRI 검증까지 계획하면 설득력 있음.",
+    "연구실 자원 제약(MRI 품질, EEG/PET 미보유) 내에서 실행 가능한 방향 찾기가 핵심. 혈중 Aβ + 호흡 훈련 도구 조합이 가장 현실적.",
+    "발표는 결과 설명이 아니라 logic chain을 명확하게 보여주는 것. 슬라이드 10 수정으로 '왜 심혈관?'의 의문을 선제적으로 해결 가능."
+  ],
+  "files_modified": [
+    {
+      "path": "/mnt/d/00_Project/research_notes/generate_note.py",
+      "type": "Python",
+      "description": "advisor_session 필드 추가, toggleOrig 함수 내 advisor 섹션 렌더링"
+    },
+    {
+      "path": "/mnt/d/00_Project/research_notes/data/2026-05-18.json",
+      "type": "JSON",
+      "description": "advisor_session 필드 5개 토글(현황진단, 문헌리뷰, 방향탐색, 제약분석, 결론) 추가"
+    },
+    {
+      "path": "/mnt/d/00_Project/research_notes/index.html",
+      "type": "HTML",
+      "description": "픽셀 테마→흰 테마 변환, 헤더 제목 크기 1.9rem, 맑은고딕, 생존일 카운터 추가"
+    },
+    {
+      "path": "/mnt/d/00_Project/research_notes/manifest.json",
+      "type": "JSON",
+      "description": "앱명 '채연이의 도비 일지', 아이콘·색상 업데이트"
+    },
+    {
+      "path": "/mnt/d/00_Project/20260519_공개발표회/20260519_공개발표회_발표스크립트.txt",
+      "type": "Text",
+      "description": "슬라이드 10번 스크립트 수정(심혈관 지표 이유 명시), 슬라이드 15번 최종 완성"
+    }
   ],
   "date": "2026-05-18",
   "start_time": "20260518 09:25",
-  "end_time": "20260518 21:43",
+  "end_time": "20260518 21:44",
   "daily_goal": "1. 발표 자료 및 발표 스크립트 작성\\n2. 예상 질문 및 답안 준비"
 }
