@@ -1,13 +1,13 @@
 {
-  "name": "Chaeyeon's Research Note",
-  "short_name": "연구노트",
-  "description": "의공학 연구 일지",
+  "name": "채연이의 도비 일지 🧟 — 탈출기원!",
+  "short_name": "도비일지",
+  "description": "의공학 대학원 탈출을 위한 연구 일지",
   "start_url": "/Research_Note/",
   "scope": "/Research_Note/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#f0f4f8",
-  "theme_color": "#1a1a2e",
+  "background_color": "#0a0a14",
+  "theme_color": "#0a0a14",
   "icons": [
     {
       "src": "icons/icon-192.png",
