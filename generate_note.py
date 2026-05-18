@@ -324,7 +324,7 @@ body{font-family:'Malgun Gothic','맑은 고딕',system-ui,sans-serif;background
 .cal-cell.empty{background:transparent;border-color:transparent;}
 .cal-cell.today{border-color:#1565c0!important;border-width:2px;box-shadow:none;}
 .cal-cell.today .day-num{color:#1565c0;font-weight:800;}
-.day-num{font-size:1rem;font-weight:600;color:#777;margin-bottom:5px;display:flex;align-items:center;gap:4px;}
+.day-num{font-size:1rem;font-weight:600;color:#777;margin-bottom:2px;}
 .cal-cell.has-note.theme-rsp{border-color:#f48fb1;}
 .cal-cell.has-note.theme-rsp:hover{box-shadow:0 4px 16px rgba(233,30,99,.18);}
 .cal-cell.has-note.theme-rsp .kw-tag{background:#fce4ec;color:#c2185b;border-radius:8px;}
@@ -343,9 +343,9 @@ body{font-family:'Malgun Gothic','맑은 고딕',system-ui,sans-serif;background
 .legend-item{display:flex;align-items:center;gap:5px;font-size:.88rem;color:#666;}
 .legend-dot{width:10px;height:10px;border-radius:50%;}
 .pixel-zombie-wrap{display:none;}
-.today-zombie{font-size:.95rem;line-height:1;}
+.today-zombie{display:block;text-align:center;font-size:1.2rem;line-height:1;margin-top:4px;width:100%;}
 .cal-cell.has-note::after{content:'';position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,.15);display:none;}
-@media(max-width:700px){.page{padding:10px 6px;}.page-header{padding:14px 16px 14px;border-radius:14px;}.page-title{font-size:1.2rem;}.page-subtitle{font-size:.8rem;}.header-badge{font-size:.66rem;padding:3px 8px;}.cal-nav-row{flex-direction:column;align-items:center;gap:4px;}.month-label{font-size:1rem;}.cal-grid{grid-template-columns:50px repeat(7,minmax(0,1fr));gap:2px;}.cal-week-header{font-size:.55rem;padding:5px 0;}.cal-week-goal{min-height:52px;padding:4px 3px;}.week-goal-text{font-size:.65rem;}.week-goal-empty{font-size:.6rem;}.cal-day-name{font-size:.7rem;padding:5px 0;}.cal-cell{min-height:52px;padding:4px 3px;}.day-num{font-size:.78rem;}.kw-list{display:none;}.cal-cell.has-note::after{display:block;}}
+@media(max-width:700px){.page{padding:10px 6px;}.page-header{padding:14px 16px 14px;border-radius:14px;}.page-title{font-size:1.2rem;}.page-subtitle{font-size:.8rem;}.header-badge{font-size:.66rem;padding:3px 8px;}.cal-nav-row{flex-direction:column;align-items:center;gap:4px;}.month-label{font-size:1rem;}.cal-grid{grid-template-columns:65px repeat(7,minmax(0,1fr));gap:2px;}.today-zombie{font-size:1.8rem;margin-top:2px;}.cal-week-header{font-size:.55rem;padding:5px 0;}.cal-week-goal{min-height:52px;padding:4px 3px;}.week-goal-text{font-size:.65rem;}.week-goal-empty{font-size:.6rem;}.cal-day-name{font-size:.7rem;padding:5px 0;}.cal-cell{min-height:52px;padding:4px 3px;}.day-num{font-size:.78rem;}.kw-list{display:none;}.cal-cell.has-note::after{display:block;}}
 </style>
 </head>
 <body>
@@ -473,13 +473,13 @@ function renderCalendar() {
       const numEl = document.createElement('div');
       numEl.className = 'day-num';
       numEl.textContent = dayNum;
+      cell.appendChild(numEl);
       if (cell.classList.contains('today')) {
-        const zEl = document.createElement('span');
+        const zEl = document.createElement('div');
         zEl.className = 'today-zombie';
         zEl.textContent = '🧟';
-        numEl.appendChild(zEl);
+        cell.appendChild(zEl);
       }
-      cell.appendChild(numEl);
 
       if (noteInfo) {
         const kwList = document.createElement('div');
