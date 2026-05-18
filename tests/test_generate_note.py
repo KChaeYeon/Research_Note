@@ -132,7 +132,8 @@ def test_generate_note_data_json_fallback():
     assert result['code_highlights'] == []
     assert result['insights'] == []
     assert result['date'] == '2026-05-17'
-    assert 'summary' in result
+    assert 'summary_3lines' in result
+    assert result.get('theme') == 'misc'
 
 
 def test_write_note_json_creates_file():

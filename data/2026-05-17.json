@@ -1,0 +1,42 @@
+{
+  "theme": "misc",
+  "topics": [
+    "연구노트 자동화 시스템",
+    "UI/UX 개선",
+    "브라우저 캐시 문제 해결"
+  ],
+  "summary_3lines": [
+    "일일 연구노트 자동화 시스템의 UI를 전면 개편하여 테마 색상과 주간목표 컬럼 추가",
+    "폰트 크기 확대 및 fetch 방식을 임베드 방식으로 변경하여 파일 프로토콜 호환성 개선",
+    "브라우저 보안 정책 우회로 로컬 HTML에서 JSON 데이터를 직접 표시 가능하게 완성"
+  ],
+  "qa_highlights": [
+    {
+      "q_original": "어제자 내용은 하나도 정리가 안됐는데 어제자 내용도 추가해주고 아래 사항을 수정 및 보완해줘\n1. UI/UX 전문가로서 연구노트 페이지를 보기 좋게 정리\n2. 테마별 색상 구분 (호흡-분홍, 초음파-연두, 수면-보라, 기타-회색)\n3. 연구노트 상단에 날짜/출퇴근 시간/일일목표/3줄요약 추가\n4. 캘린더에 일주일 목표 컬럼 추가",
+      "a_summary": "HTML 템플릿 개편으로 모달 헤더에 출퇴근 시각과 일일목표 표시, 테마별 색상 적용, 주간목표 컬럼 추가. generate_note.py에 theme 필드와 summary_3lines 추가, 훅에서 출근 메시지 파싱해 daily_goal 추출.",
+      "a_original": "변경 목록:\n1. `generate_note.py` — theme/summary_3lines/daily_goal 필드, 새 HTML 템플릿 (weekly goal 컬럼, 테마 색상, 모달 헤더 개편)\n2. 훅 — 출근 메시지에서 daily_goal 추출\n3. 2026-05-17 노트 재생성 (새 포맷)\n\n캘린더: 8컬럼 (주간목표 열 + 7요일), 테마별 색상 (5/17은 연분홍 = 호흡 조절)\n모달: 상단에 날짜/출퇴근 시각/오늘의 목표 → 3줄 요약 → Q&A/코드/인사이트 순서"
+    },
+    {
+      "q_original": "글씨 크기를 더 키워주고, 어제자 연구노트는 아직도 보이지 않아. 이 부분 수정해줘.",
+      "a_summary": "파일:// 프로토콜에서 fetch() 차단 문제 해결. 모든 노트 데이터를 JSON 형식으로 HTML 내부에 직접 임베드하여 로컬 환경에서 작동 가능하게 변경. 동시에 CSS 폰트 크기 전체 확대 (18px→22px, 14px→18px 등).",
+      "a_original": "브라우저 캐시 문제일 수 있으니 데이터 디렉토리도 확인합니다. 두 JSON 파일 모두 존재합니다. 문제는 `file://` URL로 열면 브라우저가 `fetch()` 요청을 보안상 차단하기 때문입니다. 노트 데이터를 HTML에 직접 임베드하도록 수정 + 폰트 크기 증가 동시에 처리합니다. 핵심 변경: `fetch('./data/...')` → `const NOTES_DATA = {...}` 임베드 방식으로 교체."
+    }
+  ],
+  "code_highlights": [
+    "Python generate_note.py: theme 자동 분류 로직 추가 (RSP_hemodynamics→'rsp', Sleep_InfraSlow_RSP→'sleep' 등), summary_3lines 필드 생성",
+    "Hook script: 출근 메시지 정규식 파싱으로 '출근 - [목표]' 형식에서 daily_goal 추출",
+    "HTML: `<script>const NOTES_DATA = {...}</script>` 형태로 모든 노트를 임베드, NOTES_META 대신 NOTES_DATA 사용",
+    "CSS: 계산 폰트 크기 22px, 레이블 18px, 요약 16px, Q&A 16px, 카드 제목 18px로 통일",
+    "rebuild_index_html(): json.dumps()로 JSON 직렬화 후 __NOTES_DATA__ 플레이스홀더 치환"
+  ],
+  "insights": [
+    "file:// 프로토콜은 CORS 제약이 있어 fetch() 차단 → 데이터 임베드 방식으로 근본적 해결",
+    "UI 개선은 시각적 신뢰도 향상 (테마 색상 + 계층 구조 명확화) → 사용성 직결",
+    "일일목표 추출을 훅 단계에서 수행하면 note 생성 로직 단순화, 데이터 정규성 향상",
+    "주간목표는 주 1회(월요일) 설정으로 충분하므로 weekly_goals.json으로 별도 관리"
+  ],
+  "date": "2026-05-17",
+  "start_time": "20260517 16:00",
+  "end_time": "20260518 09:16",
+  "daily_goal": ""
+}
