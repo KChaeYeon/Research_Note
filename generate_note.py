@@ -344,7 +344,8 @@ body{font-family:'Malgun Gothic','맑은 고딕',system-ui,sans-serif;background
 .legend-dot{width:10px;height:10px;border-radius:50%;}
 .pixel-zombie-wrap{display:none;}
 .today-zombie{font-size:.95rem;line-height:1;}
-@media(max-width:700px){.page-header{padding:16px 18px 16px;border-radius:14px;}.page-title{font-size:1.25rem;}.page-subtitle{font-size:.82rem;}.header-badge{font-size:.68rem;padding:3px 9px;}.cal-nav-row{flex-direction:column;align-items:center;gap:4px;}.month-label{font-size:1rem;}}
+.cal-cell.has-note::after{content:'';position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,.15);display:none;}
+@media(max-width:700px){.page{padding:10px 6px;}.page-header{padding:14px 16px 14px;border-radius:14px;}.page-title{font-size:1.2rem;}.page-subtitle{font-size:.8rem;}.header-badge{font-size:.66rem;padding:3px 8px;}.cal-nav-row{flex-direction:column;align-items:center;gap:4px;}.month-label{font-size:1rem;}.cal-grid{grid-template-columns:50px repeat(7,minmax(0,1fr));gap:2px;}.cal-week-header{font-size:.55rem;padding:5px 0;}.cal-week-goal{min-height:52px;padding:4px 3px;}.week-goal-text{font-size:.65rem;}.week-goal-empty{font-size:.6rem;}.cal-day-name{font-size:.7rem;padding:5px 0;}.cal-cell{min-height:52px;padding:4px 3px;}.day-num{font-size:.78rem;}.kw-list{display:none;}.cal-cell.has-note::after{display:block;}}
 </style>
 </head>
 <body>
@@ -354,7 +355,7 @@ body{font-family:'Malgun Gothic','맑은 고딕',system-ui,sans-serif;background
       <div class="page-title">🧟 채연이의 도비 일지</div>
       <div class="page-subtitle">탈출기원 연구 일지</div>
       <div class="header-badges">
-        <span class="header-badge">🎓 5년차 생존자</span>
+        <span class="header-badge" id="badge-survival">🎓 5년차 생존자</span>
         <span class="header-badge">🧠 glymphatic 연구 중</span>
         <span class="header-badge">☕ 카페인으로 버팀</span>
         <span class="header-badge">✍️ 논문 쓰는 좀비</span>
@@ -626,6 +627,13 @@ document.getElementById('next-month').onclick = () => {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalDirect(); });
 
 init();
+
+(function(){
+  var start = new Date('2022-03-02');
+  var days = Math.floor((new Date() - start) / 86400000);
+  var el = document.getElementById('badge-survival');
+  if(el) el.textContent = '🎓 5년차 생존자 +' + days + '일';
+})();
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
