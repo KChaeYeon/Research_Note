@@ -1,7 +1,19 @@
 import json
+import os
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+
+# Load ANTHROPIC_API_KEY from ~/.research_notes_env if not already set.
+# (Kept out of ~/.bashrc to avoid conflicting with Claude Code OAuth.)
+if not os.environ.get("ANTHROPIC_API_KEY"):
+    _env_file = Path.home() / ".research_notes_env"
+    if _env_file.is_file():
+        for _line in _env_file.read_text().splitlines():
+            _m = re.match(r'\s*(?:export\s+)?([A-Z_][A-Z0-9_]*)=(.*)', _line)
+            if _m:
+                os.environ.setdefault(_m.group(1), _m.group(2).strip().strip('"').strip("'"))
 
 import anthropic
 
@@ -281,6 +293,14 @@ body { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; background
 .theme-panel { display: none; padding: 18px 28px 28px; }
 .theme-panel.active { display: block; }
 .theme-panel-empty { text-align: center; color: #ccc; padding: 40px 0; font-size: 0.95rem; }
+.advisor-session { margin-top: 4px; }
+.advisor-meta { font-size: 0.82rem; color: #888; margin-bottom: 10px; font-style: italic; }
+.advisor-block { border: 1px solid #c5cae9; border-radius: 9px; margin-bottom: 6px; overflow: hidden; }
+.advisor-btn { width: 100%; text-align: left; background: #e8eaf6; border: none; padding: 11px 14px; font-size: 0.9rem; font-weight: 700; color: #283593; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.15s; }
+.advisor-btn:hover { background: #d9ddf6; }
+.advisor-arrow { font-size: 0.72rem; transition: transform 0.2s; display: inline-block; }
+.advisor-btn.open .advisor-arrow { transform: rotate(90deg); }
+.advisor-body { display: none; padding: 13px 16px; font-size: 0.88rem; line-height: 1.8; color: #444; background: #fafbff; border-top: 1px solid #e8ecf0; white-space: pre-wrap; }
 </style>
 </head>
 <body>
@@ -466,11 +486,28 @@ function renderModalNote(note) {
       `<div class="highlight-item code-item">🔧 ${escHtml(c)}</div>`).join('');
     const insights = (note.insights || []).map(ins =>
       `<div class="highlight-item insight-item">💡 ${escHtml(ins)}</div>`).join('');
+    let advisorHtml = '';
+    if (themeKey === 'misc' && note.advisor_session) {
+      const adv = note.advisor_session;
+      const blocks = (adv.sections || []).map((sec, idx) => `
+        <div class="advisor-block">
+          <button class="advisor-btn" id="adv-btn-${idx}" onclick="toggleAdvisor(${idx})">
+            <span class="advisor-arrow">▶</span>${escHtml(sec.heading)}
+          </button>
+          <div class="advisor-body" id="adv-body-${idx}">${escHtml(sec.content)}</div>
+        </div>`).join('');
+      advisorHtml = `<div class="section-title">🎓 지도교수 상담 세션</div>
+        <div class="advisor-session">
+          <div class="advisor-meta">${escHtml(adv.title || '')} · ${escHtml(adv.duration || '')}</div>
+          ${blocks}
+        </div>`;
+    }
     return `
       ${summaryHtml ? `<div class="section-title">📝 오늘의 요약</div><div class="summary-3lines">${summaryHtml}</div>` : ''}
       ${qaHtml ? `<div class="section-title">💬 주요 Q&A</div>${qaHtml}` : ''}
       ${codes ? `<div class="section-title">🔧 코드 / 구현</div>${codes}` : ''}
-      ${insights ? `<div class="section-title">💡 핵심 인사이트</div>${insights}` : ''}`;
+      ${insights ? `<div class="section-title">💡 핵심 인사이트</div>${insights}` : ''}
+      ${advisorHtml}`;
   }
 
   const tabsHtml = THEME_ORDER.map(tk => {
@@ -510,6 +547,13 @@ function closeModalDirect() { document.getElementById('modal-backdrop').classLis
 function toggleOrig(i) {
   const el = document.getElementById(`qa-orig-${i}`);
   el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+function toggleAdvisor(idx) {
+  const body = document.getElementById('adv-body-' + idx);
+  const btn = document.getElementById('adv-btn-' + idx);
+  const isOpen = body.style.display === 'block';
+  body.style.display = isOpen ? 'none' : 'block';
+  btn.classList.toggle('open', !isOpen);
 }
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
