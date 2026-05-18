@@ -201,7 +201,7 @@ body { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; background
 .legend-label { font-size: 0.85rem; font-weight: 700; color: #999; letter-spacing: 0.06em; text-transform: uppercase; margin-right: 4px; }
 .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.88rem; color: #666; }
 .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
-.cal-grid { display: grid; grid-template-columns: 120px repeat(7, 1fr); gap: 5px; }
+.cal-grid { display: grid; grid-template-columns: 160px repeat(7, minmax(0, 1fr)); gap: 5px; }
 .cal-week-header { display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: #aaa; padding: 8px 0; letter-spacing: 0.05em; text-transform: uppercase; }
 .cal-day-name { text-align: center; font-size: 0.88rem; font-weight: 700; color: #999; padding: 8px 0; letter-spacing: 0.04em; }
 .cal-week-goal { background: #fffde7; border: 1.5px solid #ffe082; border-radius: 10px; padding: 8px 7px; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 96px; }
@@ -218,7 +218,7 @@ body { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; background
   .page { padding: 16px 10px; }
   .page-title { font-size: 1.2rem; }
   .page-subtitle { font-size: 0.82rem; }
-  .cal-grid { grid-template-columns: 70px repeat(7, 1fr); gap: 3px; }
+  .cal-grid { grid-template-columns: 90px repeat(7, minmax(0, 1fr)); gap: 3px; }
   .cal-week-goal { min-height: 64px; padding: 5px 4px; }
   .week-goal-text { font-size: 0.72rem; }
   .cal-cell { min-height: 64px; padding: 5px 4px; }
@@ -275,6 +275,12 @@ body { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; background
 .code-item { background: #f1f8e9; border-left: 3px solid #66bb6a; }
 .insight-item { background: #fff8e1; border-left: 3px solid #ffca28; }
 .loading { text-align: center; color: #bbb; padding: 50px 0; font-size: 1rem; }
+.theme-tabs { display: flex; gap: 0; border-bottom: 2px solid #eee; background: #fafafa; }
+.theme-tab { flex: 1; padding: 11px 4px; font-size: 0.82rem; font-weight: 700; text-align: center; cursor: pointer; border: none; background: none; color: #aaa; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color 0.15s, border-color 0.15s; letter-spacing: -0.01em; white-space: nowrap; }
+.theme-tab.active { color: var(--tab-color); border-bottom-color: var(--tab-color); }
+.theme-panel { display: none; padding: 18px 28px 28px; }
+.theme-panel.active { display: block; }
+.theme-panel-empty { text-align: center; color: #ccc; padding: 40px 0; font-size: 0.95rem; }
 </style>
 </head>
 <body>
@@ -426,8 +432,8 @@ function openNote(dateStr) {
 }
 
 function renderModalNote(note) {
-  const theme = note.theme || 'misc';
-  const tc = THEME_COLORS[theme] || THEME_COLORS.misc;
+  const noteTheme = note.theme || 'misc';
+  const tc = THEME_COLORS[noteTheme] || THEME_COLORS.misc;
 
   const [y, m, d] = (note.date || '').split('-').map(Number);
   const dayNames = ['일','월','화','수','목','금','토'];
@@ -437,25 +443,46 @@ function renderModalNote(note) {
     `<span class="topic-tag" style="background:${tc.bg};color:${tc.text}">${escHtml(t)}</span>`
   ).join('');
 
-  const lines3 = (note.summary_3lines && note.summary_3lines.length)
-    ? note.summary_3lines
-    : (note.summary ? [note.summary] : []);
-  const summaryHtml = lines3.map((line, i) =>
-    `<div class="summary-line"><span class="summary-num" style="background:${tc.accent}">${i+1}</span>${escHtml(line)}</div>`
-  ).join('');
+  const THEME_ORDER = ['rsp', 'ultrasound', 'sleep', 'misc'];
 
-  const qaHtml = (note.qa_highlights || []).map((qa, i) => `
-    <div class="qa-item">
-      <div class="qa-q">Q. ${escHtml(qa.q_original || '')}</div>
-      <div class="qa-a-summary">A. ${escHtml(qa.a_summary || '')}</div>
-      ${qa.a_original ? `<span class="qa-toggle" onclick="toggleOrig(${i})">▼ 원문 보기</span><div class="qa-original" id="qa-orig-${i}">${escHtml(qa.a_original)}</div>` : ''}
-    </div>`).join('');
+  function buildPanelContent(themeKey) {
+    if (noteTheme !== themeKey) {
+      return `<div class="theme-panel-empty">이 날은 해당 주제 작업 없음</div>`;
+    }
+    const panelTc = THEME_COLORS[themeKey];
+    const lines3 = (note.summary_3lines && note.summary_3lines.length)
+      ? note.summary_3lines
+      : (note.summary ? [note.summary] : []);
+    const summaryHtml = lines3.map((line, i) =>
+      `<div class="summary-line"><span class="summary-num" style="background:${panelTc.accent}">${i+1}</span>${escHtml(line)}</div>`
+    ).join('');
+    const qaHtml = (note.qa_highlights || []).map((qa, i) => `
+      <div class="qa-item">
+        <div class="qa-q">Q. ${escHtml(qa.q_original || '')}</div>
+        <div class="qa-a-summary">A. ${escHtml(qa.a_summary || '')}</div>
+        ${qa.a_original ? `<span class="qa-toggle" onclick="toggleOrig(${i})">▼ 원문 보기</span><div class="qa-original" id="qa-orig-${i}">${escHtml(qa.a_original)}</div>` : ''}
+      </div>`).join('');
+    const codes = (note.code_highlights || []).map(c =>
+      `<div class="highlight-item code-item">🔧 ${escHtml(c)}</div>`).join('');
+    const insights = (note.insights || []).map(ins =>
+      `<div class="highlight-item insight-item">💡 ${escHtml(ins)}</div>`).join('');
+    return `
+      ${summaryHtml ? `<div class="section-title">📝 오늘의 요약</div><div class="summary-3lines">${summaryHtml}</div>` : ''}
+      ${qaHtml ? `<div class="section-title">💬 주요 Q&A</div>${qaHtml}` : ''}
+      ${codes ? `<div class="section-title">🔧 코드 / 구현</div>${codes}` : ''}
+      ${insights ? `<div class="section-title">💡 핵심 인사이트</div>${insights}` : ''}`;
+  }
 
-  const codes = (note.code_highlights || []).map(c =>
-    `<div class="highlight-item code-item">🔧 ${escHtml(c)}</div>`).join('');
+  const tabsHtml = THEME_ORDER.map(tk => {
+    const c = THEME_COLORS[tk];
+    const active = tk === noteTheme ? 'active' : '';
+    return `<button class="theme-tab ${active}" style="--tab-color:${c.accent}" onclick="switchTab('${tk}')">${escHtml(c.label)}</button>`;
+  }).join('');
 
-  const insights = (note.insights || []).map(ins =>
-    `<div class="highlight-item insight-item">💡 ${escHtml(ins)}</div>`).join('');
+  const panelsHtml = THEME_ORDER.map(tk => {
+    const active = tk === noteTheme ? 'active' : '';
+    return `<div class="theme-panel ${active}" id="panel-${tk}">${buildPanelContent(tk)}</div>`;
+  }).join('');
 
   document.getElementById('modal-content').innerHTML = `
     <div class="modal-header" style="background:linear-gradient(140deg,${tc.bg} 0%,#fff 65%);border-left:4px solid ${tc.accent}">
@@ -465,13 +492,17 @@ function renderModalNote(note) {
       ${note.daily_goal ? `<div class="modal-goal">🎯 ${escHtml(note.daily_goal)}</div>` : ''}
       <div class="topic-tags">${topics}</div>
     </div>
-    <div class="modal-divider"></div>
-    <div class="modal-body">
-      ${summaryHtml ? `<div class="section-title">📝 오늘의 요약</div><div class="summary-3lines">${summaryHtml}</div>` : ''}
-      ${qaHtml ? `<div class="section-title">💬 주요 Q&A</div>${qaHtml}` : ''}
-      ${codes ? `<div class="section-title">🔧 코드 / 구현</div>${codes}` : ''}
-      ${insights ? `<div class="section-title">💡 핵심 인사이트</div>${insights}` : ''}
-    </div>`;
+    <div class="theme-tabs">${tabsHtml}</div>
+    ${panelsHtml}`;
+}
+
+function switchTab(themeKey) {
+  document.querySelectorAll('.theme-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.theme-panel').forEach(p => p.classList.remove('active'));
+  const tab = document.querySelector(`.theme-tab[onclick="switchTab('${themeKey}')"]`);
+  if (tab) tab.classList.add('active');
+  const panel = document.getElementById(`panel-${themeKey}`);
+  if (panel) panel.classList.add('active');
 }
 
 function closeModal(e) { if (e.target === document.getElementById('modal-backdrop')) closeModalDirect(); }
