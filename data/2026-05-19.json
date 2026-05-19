@@ -1,19 +1,14 @@
 {
-  "theme": "sleep",
-  "topics": [
-    "연구공개발표회 발표",
-    "Sleep-InfraSlow_RSP 논문 discussion 작성"
-  ],
+  "theme": "misc",
+  "topics": [],
   "summary_3lines": [
-    "오전: 연구공개발표회에서 호흡 조절 & glymphatic 연구 발표 수행",
-    "오후: Sleep-InfraSlow_Rhythm 논문 discussion 섹션 집중 작성",
-    ""
+    "```json\n{\n  \"date\": \"2026-05-19\",\n  \"theme\": \"sleep\",\n  \"topics\": [\n    \"Sleep-InfraSlow_RSP 논문 Disc"
   ],
   "qa_highlights": [],
   "code_highlights": [],
   "insights": [],
   "date": "2026-05-19",
-  "start_time": "20260519 08:39",
-  "end_time": "",
-  "daily_goal": "오전: 연구공개발표회 무사히 발표\n오후: Sleep-InfraSlow_Rhythm discussion 작성"
+  "start_time": "20260519 08:38",
+  "end_time": "20260519 21:43",
+  "daily_goal": ". 지금부터 모든 세션의 대화를 기억해서 오늘의 연구노트에 기록해줘. \n오늘 목표는, 오전에 연구공개발표회에서 무사히 발표를 마 오는 것이고, 오후엔 Sleep-InfraSlow_Rhythm 에 대한 논문중 discussion 을 작성할거야."
 }
