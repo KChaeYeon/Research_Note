@@ -1,14 +1,47 @@
 {
-  "theme": "misc",
-  "topics": [],
-  "summary_3lines": [
-    "```json\n{\n  \"date\": \"2026-05-19\",\n  \"theme\": \"sleep\",\n  \"topics\": [\n    \"Sleep-InfraSlow_RSP 논문 Disc"
+  "theme": "sleep",
+  "topics": [
+    "연구공개발표회 발표",
+    "Sleep-InfraSlow_RSP 논문 Discussion P1~P3 작성",
+    "프로젝트 폴더 정리 (CLAUDE.md, .omc 통합)",
+    "academic-research-skills 스킬 루트 이동"
   ],
-  "qa_highlights": [],
+  "summary_3lines": [
+    "오전: 연구공개발표회에서 호흡 조절 & glymphatic 연구 발표 수행",
+    "오후: Sleep-InfraSlow_RSP 논문 Discussion P1~P3 초안 작성 (영문+한국어, 문장별 인용 완성)",
+    "환경 정리: 프로젝트 폴더 CLAUDE.md/.omc 통합, academic-research-skills 루트로 이동 (전 폴더에서 스킬 활성화)"
+  ],
+  "qa_highlights": [
+    {
+      "q_original": "Discussion 표현에서 호흡이 CSF를 구동한다고 써도 되나?",
+      "a_summary": "안 됨. PAC는 coupling이지 causality가 아님. 'respiration drives CSF' 대신 'infra-slow respiratory oscillation is temporally associated with CSF dynamics'처럼 correlational 표현 사용. 허용 표현: may reflect, consistent with, permissive context 등.",
+      "a_original": "Discussion tone을 causal → correlational로 전환. PAC(Phase-Amplitude Coupling)는 두 신호 간 coupling 관계를 보여주는 것이지 인과관계가 아님. 관찰 연구 설계이므로 causal claim은 reviewer 지적 및 rejection 사유가 됨."
+    },
+    {
+      "q_original": "academic-paper 스킬을 이번 세션에서 바로 쓸 수 있어?",
+      "a_summary": "현 세션은 수동 적용. 스킬을 /mnt/d/00_Project/.claude/skills/academic-research-skills/로 루트 이동했으므로 새 세션부터 전 프로젝트에서 정식 12-agent 파이프라인 자동 활성화 가능.",
+      "a_original": "academic-research-skills 스킬 디렉토리를 /mnt/d/00_Project/.claude/skills/ 루트로 이동. 00_Project 하위 어느 폴더에서 세션을 시작해도 스킬이 자동 인식됨. 다음 세션부터 'academic-paper', 'deep-research' 등 트리거 키워드로 자동 호출."
+    },
+    {
+      "q_original": "Discussion P1에서 기존 문헌 프레임을 어떻게 연결해야 해?",
+      "a_summary": "P1 마지막 문장: 기존 CSF-BOLD-EEG framework(Fultz 2019, Hauglund 2020 등)를 respiratory component 포함으로 확장 가능함을 시사하는 결과와 일치한다고 마무리. 결과를 기존 모델의 extension으로 위치시킴.",
+      "a_original": "P1 구조: 기존 infraslow oscillation + CSF dynamics 문헌 요약 → 본 연구 결과가 그 framework에 호흡 요소를 추가함을 암시. 핵심 패턴: 'These findings are consistent with the emerging framework... and further suggest that respiratory-coupled infraslow oscillations may contribute to the previously described CSF-BOLD dynamics.'"
+    },
+    {
+      "q_original": "P3에서 수면 중 호흡 조절 맥락 인용 논문은 어떤 것을 써야 해?",
+      "a_summary": "Somers 1993 (NEJM, 교감신경 직접 측정), Dubois 2016 (J Neurosci, 피질 호흡 구동이 각성 특이적), Wilf 2016 (PLoS One, NREM 감각 처리 감쇠), Phillipson 1978 (호흡의 수면 중 신경 조절) 4편을 핵심 신규 인용으로 추가.",
+      "a_original": "P3 논지: 수면 중 호흡-피질 coupling이 각성 상태와 다르게 나타나는 이유를 교감신경계 억제 + 감각 처리 감쇠 + 호흡 중추 자율 조절 변화로 설명. Somers 1993: REM 수면 중 교감신경 burst 직접 측정. Dubois 2016: 피질 호흡 위상 동조가 각성 시에만 강하게 나타남. Wilf 2016: NREM 수면 중 감각 피질 반응성 감쇠."
+    }
+  ],
   "code_highlights": [],
-  "insights": [],
+  "insights": [
+    "Discussion tone: 'respiration drives CSF'가 아닌 'infra-slow respiratory oscillation이 CSF dynamics와 temporally associated' — PAC는 coupling이지 causality 아님",
+    "P1 마지막: 기존 CSF-BOLD-EEG framework를 respiratory component 포함으로 확장 가능함을 시사하는 결과와 일치",
+    "P3 핵심 신규 인용: Somers 1993(NEJM, 교감신경 직접 측정), Dubois 2016(J Neurosci, 피질 호흡 구동 각성 특이적), Wilf 2016(PLoS One, NREM 감각 처리 감쇠), Phillipson 1978(호흡 수면 중 조절)",
+    "스킬 위치: /mnt/d/00_Project/.claude/skills/academic-research-skills/ — 다음 세션부터 전 프로젝트에서 자동 인식"
+  ],
   "date": "2026-05-19",
-  "start_time": "20260519 08:38",
-  "end_time": "20260519 21:43",
-  "daily_goal": ". 지금부터 모든 세션의 대화를 기억해서 오늘의 연구노트에 기록해줘. \n오늘 목표는, 오전에 연구공개발표회에서 무사히 발표를 마 오는 것이고, 오후엔 Sleep-InfraSlow_Rhythm 에 대한 논문중 discussion 을 작성할거야."
+  "start_time": "20260519 08:39",
+  "end_time": "20260519 21:46",
+  "daily_goal": "오전: 연구공개발표회 무사히 발표\n오후: Sleep-InfraSlow_Rhythm discussion 작성"
 }
