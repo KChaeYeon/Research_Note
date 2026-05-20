@@ -1,6 +1,8 @@
 {
   "theme": "sleep",
-  "topics": [],
+  "topics": [
+    "Sleep-InfraSlow_RSP 논문 Discussion 한국어 초안 작성"
+  ],
   "summary_3lines": ["", "", ""],
   "qa_highlights": [],
   "code_highlights": [],
@@ -8,5 +10,5 @@
   "date": "2026-05-20",
   "start_time": "20260520 10:44",
   "end_time": "",
-  "daily_goal": ""
+  "daily_goal": "Sleep-InfraSlow_RSP 논문 Discussion 파트 한국어 초안 전체 작성"
 }
