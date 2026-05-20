@@ -488,7 +488,7 @@ function renderSidebar() {
     return;
   }
 
-  const goals = goalText.split('\n').filter(g => g.trim());
+  const goals = goalText.split('\\n').filter(g => g.trim());
   list.innerHTML = goals.map((g, i) => `
     <li class="goal-item">
       <input type="checkbox" id="sg${i}">
