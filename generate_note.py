@@ -292,7 +292,7 @@ body { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; background
 .cal-day.theme-sleep .day-summary-dot{background:#f3e5f5;border-color:#ce93d8;}
 .cal-day.theme-ultrasound .day-summary-dot{background:#f1f8e9;border-color:#aed581;}
 .cal-day.theme-misc .day-summary-dot{background:#f5f5f5;border-color:#bdbdbd;}
-.detail-panel{position:fixed;top:0;right:-660px;width:630px;height:100vh;background:var(--card-bg);border-left:4px solid var(--border-color);box-shadow:-8px 0 0 rgba(0,0,0,0.04);padding:28px 24px;transition:right 0.3s cubic-bezier(0.25,1,0.5,1);z-index:1000;display:flex;flex-direction:column;gap:18px;overflow-y:auto;font-family:'Malgun Gothic','맑은 고딕',system-ui,sans-serif;}
+.detail-panel{position:fixed;top:0;right:-780px;width:750px;height:100vh;background:var(--card-bg);border-left:4px solid var(--border-color);box-shadow:-8px 0 0 rgba(0,0,0,0.04);padding:28px 24px;transition:right 0.3s cubic-bezier(0.25,1,0.5,1);z-index:1000;display:flex;flex-direction:column;gap:18px;overflow-y:auto;font-family:'Malgun Gothic','맑은 고딕',system-ui,sans-serif;}
 .detail-panel.open{right:0;}
 .panel-close-btn{align-self:flex-end;background:none;border:2px solid var(--border-color);padding:5px 12px;cursor:pointer;font-size:0.95rem;font-family:'Malgun Gothic','맑은 고딕',system-ui,sans-serif;}
 .panel-close-btn:hover{background:#f0f0f0;}
@@ -390,9 +390,13 @@ body{font-family:'Malgun Gothic','맑은 고딕',system-ui,sans-serif;background
   <!-- Main 2-column layout -->
   <div class="main-layout">
 
-    <!-- Sidebar: Weekly Goals -->
+    <!-- Sidebar: Monthly + Weekly Goals -->
     <aside class="sidebar-left">
-      <div class="sidebar-section-title">🎯 이번 주 목표</div>
+      <div class="sidebar-section-title">📅 이번 달 목표</div>
+      <ul class="goal-list" id="monthly-goal-list">
+        <li class="goal-item" style="color:#aaa;font-size:0.9rem;">목표를 불러오는 중...</li>
+      </ul>
+      <div class="sidebar-section-title" style="margin-top:8px;">🎯 이번 주 목표</div>
       <ul class="goal-list" id="weekly-goal-list">
         <li class="goal-item" style="color:#aaa;font-size:0.9rem;">목표를 불러오는 중...</li>
       </ul>
@@ -476,24 +480,27 @@ function renderJourney() {
 }
 
 /* ─ Sidebar: Weekly Goals ─ */
-function renderSidebar() {
-  const today = new Date();
-  const weekKey = getISOWeekKey(today.getFullYear(), today.getMonth(), today.getDate());
-  const goalText = WEEKLY_GOALS[weekKey] || '';
-  const list = document.getElementById('weekly-goal-list');
+function renderGoalList(containerId, goalText, prefix) {
+  const list = document.getElementById(containerId);
   if (!list) return;
-
   if (!goalText) {
-    list.innerHTML = '<li class="goal-item" style="color:#aaa;font-size:0.9rem;">이번 주 목표 없음</li>';
+    list.innerHTML = `<li class="goal-item" style="color:#aaa;font-size:0.9rem;">목표 없음</li>`;
     return;
   }
-
   const goals = goalText.split('\\n').filter(g => g.trim());
   list.innerHTML = goals.map((g, i) => `
     <li class="goal-item">
-      <input type="checkbox" id="sg${i}">
-      <label for="sg${i}">${escHtml(g.trim())}</label>
+      <input type="checkbox" id="${prefix}${i}">
+      <label for="${prefix}${i}">${escHtml(g.trim())}</label>
     </li>`).join('');
+}
+
+function renderSidebar() {
+  const today = new Date();
+  const monthKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+  const weekKey = getISOWeekKey(today.getFullYear(), today.getMonth(), today.getDate());
+  renderGoalList('monthly-goal-list', WEEKLY_GOALS[monthKey] || '', 'mg');
+  renderGoalList('weekly-goal-list',  WEEKLY_GOALS[weekKey]  || '', 'wg');
 }
 
 /* ─ Calendar ─ */
