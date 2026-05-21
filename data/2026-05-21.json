@@ -1,14 +1,14 @@
 {
-  "theme": "sleep",
-  "topics": [
-    "Sleep-InfraSlow_RSP 논문 Discussion 한국어 초안 완성"
+  "theme": "misc",
+  "topics": [],
+  "summary_3lines": [
+    "```json\n{\n  \"theme\": \"sleep\",\n  \"topics\": [\n    \"Sleep_InfraSlow_RSP 논문 Discussion 작성\",\n    \"P3~P5 다"
   ],
-  "summary_3lines": ["", "", ""],
   "qa_highlights": [],
   "code_highlights": [],
   "insights": [],
   "date": "2026-05-21",
   "start_time": "20260521 10:48",
-  "end_time": "",
-  "daily_goal": "Sleep-InfraSlow_RSP 논문 Discussion 한국어 초안 전체 완성 (P4~P7)"
+  "end_time": "20260521 23:23",
+  "daily_goal": ". 오늘의 연구노트를 쓰기위해 앞으로 모든 세션에서 대화한 내용을 기억해줘"
 }
